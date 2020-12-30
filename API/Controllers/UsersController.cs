@@ -18,7 +18,7 @@ namespace API.Controllers
             _context = context;
 
         }
-
+        //returns a collection list users from the entity AppUser
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
@@ -28,7 +28,7 @@ namespace API.Controllers
             
         }
 
-        //api/users/3
+        //Get//api/users by id
         [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<AppUser>> GetUser(int id) => await _context.Users.FindAsync(id);

@@ -21,6 +21,7 @@ namespace API.Controllers
 
         }
 
+        //User register DTO
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
@@ -46,6 +47,7 @@ namespace API.Controllers
 
         }
 
+        //User login DTO
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
@@ -54,10 +56,12 @@ namespace API.Controllers
 
             if (user == null) return Unauthorized("Invalid username");
 
+            //Hash to the password of the login 
             using var hmac = new HMACSHA512(user.PasswordSalt);
 
             var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
 
+            //If after the hash the user is not exist return invalid password 
             for (int i = 0; i < computedHash.Length; i++)
             {
                 if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid Password");
@@ -70,6 +74,7 @@ namespace API.Controllers
             };
         }
 
+        
         private async Task<bool> UserExists(string username)
         {
             return await _context.Users.AnyAsync(x => x.UserName == username.ToLower());
